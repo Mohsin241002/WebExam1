@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold text-center mb-6">Register</h2>
+        <form id="registrationForm" novalidate>
+            <!-- Name Field -->
+            <div class="form-group mb-4">
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <input type="text" id="name" class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                <span id="nameError" class="text-red-500 text-sm mt-1 hidden"></span>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                <span id="emailError" class="text-red-500 text-sm mt-1 hidden"></span>
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group mb-4">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                <span id="passwordError" class="text-red-500 text-sm mt-1 hidden"></span>
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="form-group mb-4">
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                <input type="password" id="confirmPassword" class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                <span id="confirmPasswordError" class="text-red-500 text-sm mt-1 hidden"></span>
+            </div>
+
+            <!-- Date of Birth Field -->
+            <div class="form-group mb-4">
+                <label for="dob" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                <input type="date" id="dob" class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                <span id="dobError" class="text-red-500 text-sm mt-1 hidden"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-between items-center">
+                <button onclick="index.html" type="submit" id="submitButton" class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Register
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Form validation logic
+        document.getElementById('registrationForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Clear previous errors
+            const errorMessages = document.querySelectorAll('span[id$="Error"]');
+            errorMessages.forEach(error => error.classList.add('hidden'));
+
+            let isValid = true;
+
+            // Name validation
+            const name = document.getElementById('name').value.trim();
+            if (!/^[a-zA-Z\s]{3,}$/.test(name)) {
+                isValid = false;
+                const nameError = document.getElementById('nameError');
+                nameError.textContent = "Name must contain at least 3 alphabetic characters.";
+                nameError.classList.remove('hidden');
+            }
+
+            // Email validation
+            const email = document.getElementById('email').value.trim();
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                isValid = false;
+                const emailError = document.getElementById('emailError');
+                emailError.textContent = "Please enter a valid email address.";
+                emailError.classList.remove('hidden');
+            }
+
+            // Password validation
+            const password = document.getElementById('password').value;
+            if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+                isValid = false;
+                const passwordError = document.getElementById('passwordError');
+                passwordError.textContent = "Password must be at least 8 characters long and contain both letters and numbers.";
+                passwordError.classList.remove('hidden');
+            }
+
+            // Confirm Password validation
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (confirmPassword !== password) {
+                isValid = false;
+                const confirmPasswordError = document.getElementById('confirmPasswordError');
+                confirmPasswordError.textContent = "Passwords do not match.";
+                confirmPasswordError.classList.remove('hidden');
+            }
+
+            // Date of Birth validation
+            const dob = document.getElementById('dob').value;
+            const dobError = document.getElementById('dobError');
+            if (dob === '') {
+                isValid = false;
+                dobError.textContent = "Please enter your date of birth.";
+                dobError.classList.remove('hidden');
+            } else {
+                const today = new Date();
+                const birthDate = new Date(dob);
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const monthDifference = today.getMonth() - birthDate.getMonth();
+                if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+
+                if (age < 18) {
+                    isValid = false;
+                    dobError.textContent = "You must be at least 18 years old to register.";
+                    dobError.classList.remove('hidden');
+                }
+            }
+
+            // If all fields are valid, submit the form
+            if (isValid) {
+                alert("Registration successful!");
+                window.location.href = "index.html";
+                document.getElementById('registrationForm').reset();
+            }
+        });
+
+        // Real-time validation and feedback
+        document.getElementById('name').addEventListener('input', function () {
+            const nameError = document.getElementById('nameError');
+            if (/^[a-zA-Z\s]{3,}$/.test(this.value)) {
+                this.classList.add('border-green-500');
+                this.classList.remove('border-red-500');
+                nameError.classList.add('hidden');
+            } else {
+                this.classList.add('border-red-500');
+                this.classList.remove('border-green-500');
+                nameError.textContent = "Name must contain at least 3 alphabetic characters.";
+                nameError.classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('email').addEventListener('input', function () {
+            const emailError = document.getElementById('emailError');
+            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value)) {
+                this.classList.add('border-green-500');
+                this.classList.remove('border-red-500');
+                emailError.classList.add('hidden');
+            } else {
+                this.classList.add('border-red-500');
+                this.classList.remove('border-green-500');
+                emailError.textContent = "Please enter a valid email address.";
+                emailError.classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('password').addEventListener('input', function () {
+            const passwordError = document.getElementById('passwordError');
+            if (this.value.length >= 8 && /\d/.test(this.value) && /[a-zA-Z]/.test(this.value)) {
+                this.classList.add('border-green-500');
+                this.classList.remove('border-red-500');
+                passwordError.classList.add('hidden');
+            } else {
+                this.classList.add('border-red-500');
+                this.classList.remove('border-green-500');
+                passwordError.textContent = "Password must be at least 8 characters long and contain both letters and numbers.";
+                passwordError.classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('confirmPassword').addEventListener('input', function () {
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+            if (this.value === document.getElementById('password').value) {
+                this.classList.add('border-green-500');
+                this.classList.remove('border-red-500');
+                confirmPasswordError.classList.add('hidden');
+            } else {
+                this.classList.add('border-red-500');
+                this.classList.remove('border-green-500');
+                confirmPasswordError.textContent = "Passwords do not match.";
+                confirmPasswordError.classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('dob').addEventListener('input', function () {
+            const dobError = document.getElementById('dobError');
+            const today = new Date();
+            const birthDate = new Date(this.value);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDifference = today.getMonth() - birthDate.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            if (age >= 18) {
+                this.classList.add('border-green-500');
+                this.classList.remove('border-red-500');
+                dobError.classList.add('hidden');
+            } else {
+                this.classList.add('border-red-500');
+                this.classList.remove('border-green-500');
+                dobError.textContent = "You must be at least 18 years old to register.";
+                dobError.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

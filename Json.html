@@ -42,11 +42,10 @@
     </table>
 
     <script>
-        // Replace with your Gist ID
-        const gistId = 'abc123';
+        // Fetch data from GitHub repository
+        const url = 'https://raw.githubusercontent.com/Mohsin241002/WebExam1/main/courses.json';
 
-        // Fetch data from GitHub Gist
-        fetch(`https://gist.githubusercontent.com/${gistId}/raw`)
+        fetch(url)
             .then(response => response.json())
             .then(data => {
                 // Render course data

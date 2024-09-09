@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <!-- Registration form container -->
     <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
         <h2 class="text-2xl font-bold text-center mb-6">Register</h2>
         <form id="registrationForm" novalidate>
@@ -55,59 +56,63 @@
     </div>
 
     <script>
-        // Form validation logic
+        /**
+         * Event listener for form submission. 
+         * It validates all fields and shows error messages if any fields are invalid.
+         * If all fields are valid, an alert is shown and the page redirects to "index.html".
+         */
         document.getElementById('registrationForm').addEventListener('submit', function (event) {
-            event.preventDefault();
+            event.preventDefault(); // Prevents default form submission behavior
 
-            // Clear previous errors
+            // Clear previous error messages
             const errorMessages = document.querySelectorAll('span[id$="Error"]');
-            errorMessages.forEach(error => error.classList.add('hidden'));
+            errorMessages.forEach(error => error.classList.add('hidden')); // Hide all previous error messages
 
-            let isValid = true;
+            let isValid = true; // Track overall form validity
 
-            // Name validation
+            // Name validation logic
             const name = document.getElementById('name').value.trim();
             if (!/^[a-zA-Z\s]{3,}$/.test(name)) {
                 isValid = false;
                 const nameError = document.getElementById('nameError');
-                nameError.textContent = "Name must contain at least 3 alphabetic characters.";
-                nameError.classList.remove('hidden');
+                nameError.textContent = "Name must contain at least 3 alphabetic characters."; // Error message for invalid name
+                nameError.classList.remove('hidden'); // Show error message
             }
 
-            // Email validation
+            // Email validation logic
             const email = document.getElementById('email').value.trim();
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 isValid = false;
                 const emailError = document.getElementById('emailError');
-                emailError.textContent = "Please enter a valid email address.";
-                emailError.classList.remove('hidden');
+                emailError.textContent = "Please enter a valid email address."; // Error message for invalid email
+                emailError.classList.remove('hidden'); // Show error message
             }
 
-            // Password validation
+            // Password validation logic
             const password = document.getElementById('password').value;
             if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
                 isValid = false;
                 const passwordError = document.getElementById('passwordError');
-                passwordError.textContent = "Password must be at least 8 characters long and contain both letters and numbers.";
-                passwordError.classList.remove('hidden');
+                passwordError.textContent = "Password must be at least 8 characters long and contain both letters and numbers."; // Error message for weak password
+                passwordError.classList.remove('hidden'); // Show error message
             }
 
-            // Confirm Password validation
+            // Confirm Password validation logic
             const confirmPassword = document.getElementById('confirmPassword').value;
             if (confirmPassword !== password) {
                 isValid = false;
                 const confirmPasswordError = document.getElementById('confirmPasswordError');
-                confirmPasswordError.textContent = "Passwords do not match.";
-                confirmPasswordError.classList.remove('hidden');
+                confirmPasswordError.textContent = "Passwords do not match."; // Error message if passwords don't match
+                confirmPasswordError.classList.remove('hidden'); // Show error message
             }
 
-            // Date of Birth validation
+            // Date of Birth validation logic
             const dob = document.getElementById('dob').value;
             const dobError = document.getElementById('dobError');
             if (dob === '') {
                 isValid = false;
-                dobError.textContent = "Please enter your date of birth.";
-                dobError.classList.remove('hidden');
+                dobError.textContent = "Please enter your date of birth."; // Error message for missing date of birth
+                dobError.classList.remove('hidden'); // Show error message
             } else {
                 const today = new Date();
                 const birthDate = new Date(dob);
@@ -119,76 +124,95 @@
 
                 if (age < 18) {
                     isValid = false;
-                    dobError.textContent = "You must be at least 18 years old to register.";
-                    dobError.classList.remove('hidden');
+                    dobError.textContent = "You must be at least 18 years old to register."; // Error message for underage
+                    dobError.classList.remove('hidden'); // Show error message
                 }
             }
 
-            // If all fields are valid, submit the form
+            // If all fields are valid, show success message and redirect to "index.html"
             if (isValid) {
-                alert("Registration successful!");
-                window.location.href = "index.html";
-                document.getElementById('registrationForm').reset();
+                alert("Registration successful!"); // Success message
+                window.location.href = "index.html"; // Redirect to homepage
+                document.getElementById('registrationForm').reset(); // Clear form fields
             }
         });
 
-        // Real-time validation and feedback
+        /**
+         * Real-time validation for the Name field.
+         * Shows error if the name does not match the required pattern.
+         */
         document.getElementById('name').addEventListener('input', function () {
             const nameError = document.getElementById('nameError');
             if (/^[a-zA-Z\s]{3,}$/.test(this.value)) {
-                this.classList.add('border-green-500');
-                this.classList.remove('border-red-500');
-                nameError.classList.add('hidden');
+                this.classList.add('border-green-500'); // Add green border for valid input
+                this.classList.remove('border-red-500'); // Remove red border
+                nameError.classList.add('hidden'); // Hide error message
             } else {
-                this.classList.add('border-red-500');
-                this.classList.remove('border-green-500');
-                nameError.textContent = "Name must contain at least 3 alphabetic characters.";
-                nameError.classList.remove('hidden');
+                this.classList.add('border-red-500'); // Add red border for invalid input
+                this.classList.remove('border-green-500'); // Remove green border
+                nameError.textContent = "Name must contain at least 3 alphabetic characters."; // Show error message
+                nameError.classList.remove('hidden'); // Display error message
             }
         });
 
+        /**
+         * Real-time validation for the Email field.
+         * Shows error if the email does not match the required pattern.
+         */
         document.getElementById('email').addEventListener('input', function () {
             const emailError = document.getElementById('emailError');
             if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value)) {
-                this.classList.add('border-green-500');
-                this.classList.remove('border-red-500');
-                emailError.classList.add('hidden');
+                this.classList.add('border-green-500'); // Add green border for valid email
+                this.classList.remove('border-red-500'); // Remove red border
+                emailError.classList.add('hidden'); // Hide error message
             } else {
-                this.classList.add('border-red-500');
-                this.classList.remove('border-green-500');
-                emailError.textContent = "Please enter a valid email address.";
-                emailError.classList.remove('hidden');
+                this.classList.add('border-red-500'); // Add red border for invalid email
+                this.classList.remove('border-green-500'); // Remove green border
+                emailError.textContent = "Please enter a valid email address."; // Show error message
+                emailError.classList.remove('hidden'); // Display error message
             }
         });
 
+        /**
+         * Real-time validation for the Password field.
+         * Ensures the password meets length and character requirements.
+         */
         document.getElementById('password').addEventListener('input', function () {
             const passwordError = document.getElementById('passwordError');
             if (this.value.length >= 8 && /\d/.test(this.value) && /[a-zA-Z]/.test(this.value)) {
-                this.classList.add('border-green-500');
-                this.classList.remove('border-red-500');
-                passwordError.classList.add('hidden');
+                this.classList.add('border-green-500'); // Add green border for strong password
+                this.classList.remove('border-red-500'); // Remove red border
+                passwordError.classList.add('hidden'); // Hide error message
             } else {
-                this.classList.add('border-red-500');
-                this.classList.remove('border-green-500');
-                passwordError.textContent = "Password must be at least 8 characters long and contain both letters and numbers.";
-                passwordError.classList.remove('hidden');
+                this.classList.add('border-red-500'); // Add red border for weak password
+                this.classList.remove('border-green-500'); // Remove green border
+                passwordError.textContent = "Password must be at least 8 characters long and contain both letters and numbers."; // Show error message
+                passwordError.classList.remove('hidden'); // Display error message
             }
         });
 
+        /**
+         * Real-time validation for the Confirm Password field.
+         * Ensures the passwords match.
+         */
         document.getElementById('confirmPassword').addEventListener('input', function () {
             const confirmPasswordError = document.getElementById('confirmPasswordError');
             if (this.value === document.getElementById('password').value) {
-                this.classList.add('border-green-500');
-                this.classList.remove('border-red-500');
-                confirmPasswordError.classList.add('hidden');
+                this.classList.add('border-green-500'); // Add green border if passwords match
+                this.classList.remove('border-red-500'); // Remove red border
+                confirmPasswordError.classList.add('hidden'); // Hide error message
             } else {
-                this.classList.add('border-red-500');
-                this.classList.remove('border-green-500');
-                confirmPasswordError.textContent = "Passwords do not match.";
-                confirmPasswordError.classList.remove('hidden');
+                this.classList.add('border-red-500'); // Add red border if passwords don't match
+                this.classList.remove('border-green-500'); // Remove green border
+                confirmPasswordError.textContent = "Passwords do not match."; // Show error message
+                confirmPasswordError.classList.remove('hidden'); // Display error message
             }
         });
 
+        /**
+         * Real-time validation for the Date of Birth field.
+         * Ensures the user is at least 18 years old.
+         */
         document.getElementById('dob').addEventListener('input', function () {
             const dobError = document.getElementById('dobError');
             const today = new Date();
@@ -200,14 +224,14 @@
             }
 
             if (age >= 18) {
-                this.classList.add('border-green-500');
-                this.classList.remove('border-red-500');
-                dobError.classList.add('hidden');
+                this.classList.add('border-green-500'); // Add green border if age is valid
+                this.classList.remove('border-red-500'); // Remove red border
+                dobError.classList.add('hidden'); // Hide error message
             } else {
-                this.classList.add('border-red-500');
-                this.classList.remove('border-green-500');
-                dobError.textContent = "You must be at least 18 years old to register.";
-                dobError.classList.remove('hidden');
+                this.classList.add('border-red-500'); // Add red border if age is invalid
+                this.classList.remove('border-green-500'); // Remove green border
+                dobError.textContent = "You must be at least 18 years old to register."; // Show error message
+                dobError.classList.remove('hidden'); // Display error message
             }
         });
     </script>
